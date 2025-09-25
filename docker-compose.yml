@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   fastapi:
-    image: streamit-v1
+    image: nitheesh86/mlops-frontend:v1
     build:
       context: .
       dockerfile: Dockerfile.api
@@ -10,7 +10,7 @@ services:
       - "8000:8000"
 
   streamlit:
-    image: fastapi-v1
+    image: nitheesh86/mlops-backend:v1
     build:
       context: ./streamlit_app
       dockerfile: Dockerfile.streamlit
