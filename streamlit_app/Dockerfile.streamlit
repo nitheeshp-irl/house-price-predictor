@@ -1,0 +1,21 @@
+# ===== FastAPI backend image =====
+FROM python:3.11-slim AS base
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+# Copy source code & (optionally) trained artifacts
+COPY . .
+
+RUN pip install --upgrade pip && pip install -r requirements.txt
+
+
+
+# Expose FastAPI port
+EXPOSE 8501
+
+# If your app module is src/api/main.py with "app" inside:
+CMD ["streamlit", "run", "app.py", "--server.address=0.0.0.0", "--server.port=8501"]
