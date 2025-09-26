@@ -25,6 +25,15 @@ jobs:
       
       - name: Run Feature Engineering
         run: python src/features/engineer.py --input data/processed/cleaned_house_data.csv --output data/processed/featured_house_data.csv --preprocessor models/trained/preprocessor.pkl
+
+      - name: Start MLflow
+        run: docker run -d -p 5555:5000 ghcr.io/mlflow/mlflow:latest mlflow server --host 0.0.0.0 --backend-store-uri sqlite:///mlflow.db --default-artifact-root /tmp/mlruns
       
       - name: Run Model Training
         run: python src/models/train_model.py --config configs/model_config.yaml --data data/processed/featured_house_data.csv --models-dir models --mlflow-tracking-uri http://localhost:5555
+      
+      - name: Cleanup MLflow
+        run: |
+          docker stop $(docker ps -q --filter ancestor=ghcr.io/mlflow/mlflow:latest) || true
+          docker rm $(docker ps -aq --filter ancestor=ghcr.io/mlflow/mlflow:latest) || true
+          docker rmi $(docker images -q ghcr.io/mlflow/mlflow:latest) || true
