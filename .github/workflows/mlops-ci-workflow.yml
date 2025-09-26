@@ -65,7 +65,6 @@ jobs:
       - name: Push backend image
         run: |
           docker push nitheesh86/mlops-backend:${IMAGE_TAG}
-          docker push nitheesh86/mlops-backend:latest
       
       - name: Push frontend image
         run: |
